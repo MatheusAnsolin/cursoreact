@@ -2,38 +2,15 @@ import { Component } from 'react';
 class App extends Component {
 
   state = {
-    posts:[
-      {
-        id: 1,
-        title: 'Titulo1',
-        body: 'corpo1'
-      },
-      
-      {
-        id: 2,
-        title: 'Titulo2',
-        body: 'corpo2'
-      },
-      {
-        id: 1,
-        title: 'Titulo3',
-        body: 'corpo3'
-      },
-
-    ]
+    posts:[ ]
   };
-  componentDidMount(){  }
+  componentDidMount(){ 
+    fetch('jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(posts => this.setState({posts})) 
+   }
   componentDidUpdate(){  }
-  componentWillUnmount(){
-    clearTimeout(this.timeoutUpdate);
-    }
-  handleTimeout = () =>{
-    const {posts, counter } = this.state;
-    posts[0].title = 'O titulo mudou'
-    
-    this.timeoutUpdate = setTimeout(() =>{
-    this.setState({posts, counter: counter+1});
-  }, 1000);
+  componentWillUnmount(){  }
   
   }
   render(){
