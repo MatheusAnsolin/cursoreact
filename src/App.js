@@ -1,50 +1,28 @@
 import { Component } from 'react';
-class App extends Component {
+import './App.css';
 
+import { loadPosts } from './utils/load-posts'
+import { Posts } from './components/Posts';
+
+class App extends Component {
   state = {
     posts:[ ]
   };
-  loadPosts = async ()=>{
-    const postsResponse =  fetch('jsonplaceholder.typicode.com/posts');
-    const photosResponse = fetch('https://jsonplaceholder.typicode.com/photos');
 
-    
-    const [ posts, photos ] = await Promise.all([postsResponse, photosResponse]);
-    const postsJson = await posts.json();
-    const photosJson = await photos.json();
+  async componentDidMount(){    
+   await this.loadPosts();
+  }
+  loadPosts = async () =>{
+  const postsAndPhotos = await loadPosts();
+  this.setState({posts:postsAndPhotos});
+  }
 
-    const postsAndPhotos = postsJson.map((post,index=>{
-      return { ...post, cover:photosJson[index].url}
-    });
-
-    this.setState({posts:postsAndPhotos});
-    
-  }
-  componentDidMount(){    
-    this.loadPosts();
-  }
-  componentDidUpdate(){  }
-  componentWillUnmount(){  }
-  
-  }
   render(){
     const { posts } = this.state;
     return(
       <section className='container'>
-      <div className='posts'>
-      {posts.map(post =>(
-        <div className='post'>
-          <img src={post.cover} alt={post.title}/>
-        <div key={post.id}
-        className='post-content'>
-        <h1>{post.title}</h1>
-        <p>{post.body}</p>
-      </div>
-      </div>
-      )
-      )}
-       </div>
-       </section>
+        <Posts posts={posts}/>
+      </section>
     )
   }
 }
