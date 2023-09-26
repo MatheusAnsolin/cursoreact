@@ -4,10 +4,14 @@ import './styles.css';
 
 import { Posts } from '../../components/Posts';
 import { loadPosts } from '../../utils/load-posts.js';
+import { Button } from '../../components/Button';
 
 export class Home extends Component {
   state = {
-    posts: []
+    posts: [],
+    allPosts: [],
+    page:0,
+    postsPerPage: 2,
   };
 
   async componentDidMount() {
@@ -15,8 +19,14 @@ export class Home extends Component {
   }
 
   loadPosts = async () => {
+    const { page, postsPerPage } = this.state;
     const postsAndPhotos = await loadPosts();
-    this.setState({ posts: postsAndPhotos });
+    this.setState({ 
+      posts: postsAndPhotos.slice(page, postsPerPage),
+    allPosts: postsAndPhotos, });
+  }
+  loadMorePosts = () =>{
+    console.log('Loading more posts chamado');
   }
 
   render() {
@@ -25,6 +35,7 @@ export class Home extends Component {
     return (
       <section className="container">
         <Posts posts={posts} />
+        <Button text='More posts'/>
       </section>
     );
   }
