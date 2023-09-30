@@ -26,7 +26,17 @@ export class Home extends Component {
     allPosts: postsAndPhotos, });
   }
   loadMorePosts = () =>{
-    console.log('Loading more posts chamado');
+    const { 
+      page,
+      postsPerPage,
+      allPosts,
+      posts
+    } = this.state;
+    const nextPage = page + postsPerPage;
+    const nextPosts = allPosts.slice(nextPage, nextPage+postsPerPage);
+    posts.push(...nextPosts);
+    
+    this.setState({posts, page: nextPage});
   }
 
   render() {
@@ -35,7 +45,12 @@ export class Home extends Component {
     return (
       <section className="container">
         <Posts posts={posts} />
-        <Button text='More posts'/>
+          <div className="button-container">
+            <Button
+            text='More posts'
+            onClick={this.loadMorePosts}
+            />
+          </div>      
       </section>
     );
   }
